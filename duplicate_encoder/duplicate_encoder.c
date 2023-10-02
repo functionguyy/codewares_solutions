@@ -39,8 +39,10 @@ list_t *addNode(list_t **head, char c)
 	return (*head);
 }
 /**
+ * listLen - counts the number of nodes in a list_t linked list
+ * @h: pointer to the head of the linked list
  *
- *
+ * Return: returns the number of nodes in the linked list
  */
 size_t listLen(const list_t *h)
 {
@@ -61,8 +63,10 @@ size_t listLen(const list_t *h)
 
 }
 /**
+ * freeList - frees allocated memory in a linked list
+ * @head: pointer to the linked list
  *
- *
+ * Return: Nothing
  */
 void freeList(list_t *head)
 {
@@ -85,17 +89,44 @@ void freeList(list_t *head)
 	}
 }
 /**
+ * stringToUpper - changes all lowercase letters of a string to uppercase
+ * @s: pointer to the string array
  *
+ * Return: pointer the resulting string
+ */
+char *stringToUpper(char *s)
+{
+	size_t idx;
+	char upperVer;
+
+
+	idx = 0;
+	while (s[idx] != '\0')
+	{
+		if (s[idx] >= 'a' && s[idx] <= 'z')
+		{
+			upperVer = s[idx] + 'A' - 'a';
+			s[idx] = upperVer;
+		}
+		idx++;
+	}
+
+	return (s);
+}
+/**
+ * DuplicateEncoder - converts a string to a new string
+ * @string: pointer to the new string
  *
- *
- *
- *
+ * Description: Each character in the new string is "(" if that character
+ * appears only once in the original string, or ")" if that character appears
+ * more than once in the original string.
+ * Return: returns pointer to the new string or NULL otherwise
  */
 char *DuplicateEncoder(const char *string)
 {
 	/* declare variables */
 	list_t *head, *temp;
-	char l, *newStringBuf;
+	char l, *newStringBuf, *stringDuplicate;
 	size_t idx, nodeCount;
 
 	/* initialize variables */
@@ -106,16 +137,19 @@ char *DuplicateEncoder(const char *string)
 	l = '\0';
 	temp = NULL;
 
+	stringDuplicate = strdup(string);
+
+	/* convert every character in the string to lower case*/
+	string = stringToUpper(stringDuplicate);
+
+
 	/* build linked list of characters in original string */
 	while (*(string + idx) != '\0')
 	{
 		l = *(string + idx);
-		addNode(&head, l);
+		addNode(&head, *(string + idx));
 		idx++;
 	}
-
-	/* convert every character in the string to lower case*/
-
 
 	/* add info to identify duplicate characters the linked list */
 	/* put this in a function call it void tagDuplicates(char *, list_t **) */
@@ -137,8 +171,6 @@ char *DuplicateEncoder(const char *string)
 
 				if (temp->seenFlag > 1)
 					temp->duplicateFlag = 1;
-				printf("temp->letter =%c\n", temp->letter);
-				printf("*(string + idx) = %c\n", *(string + idx));
 			}
 			temp = temp->next;
 		}
@@ -180,6 +212,7 @@ char *DuplicateEncoder(const char *string)
 
 
 	freeList(head);
+	free(stringDuplicate);
 
 
 	return (newStringBuf);
